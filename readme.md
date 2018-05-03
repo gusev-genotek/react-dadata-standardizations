@@ -15,14 +15,14 @@ Just another one React component for [dadata standardizations](https://dadata.ru
 
 ```javascript
 import React, { Component } from 'react';
-import DadataSuggestions from 'react-dadata-standardizations';
+import DadataStandardizations from 'react-dadata-standardizations';
 
 const token = 'your_token';
 
 class App extends Component {
   render() {
     return (
-      <DadataSuggestions
+      <DadataStandardizations
         token={ token }
         onSelect={ (suggestion) => console.log(suggestion) }
       />
