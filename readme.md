@@ -18,12 +18,14 @@ import React, { Component } from 'react';
 import DadataStandardizations from 'react-dadata-standardizations';
 
 const token = 'your_token';
+const apiUrl = 'your_api_url';
 
 class App extends Component {
   render() {
     return (
       <DadataStandardizations
         token={ token }
+        apiUrl = {apiUrl}
         onSelect={ (suggestion) => console.log(suggestion) }
       />
     );
