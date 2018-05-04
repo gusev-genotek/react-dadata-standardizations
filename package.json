@@ -24,8 +24,8 @@
     "build": "cross-env NODE_ENV=production webpack --config webpack.prod.js"
   },
   "author": {
-    "name": "Roman Bolkhovitin",
-    "email": "rbolkhovitin@gmail.com"
+    "name": "Vladimir Gusev",
+    "email": "gusev@genotek.ru"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
