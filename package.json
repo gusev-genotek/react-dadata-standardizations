@@ -1,7 +1,7 @@
 {
-  "name": "react-dadata-standardization",
+  "name": "react-dadata-standardizations",
   "version": "0.4.8",
-  "description": "Just another one react component for dadata suggestions",
+  "description": "A react component for dadata standardizations",
   "keywords": [
     "dadata",
     "suggestions",

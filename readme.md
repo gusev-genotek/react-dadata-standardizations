@@ -26,7 +26,7 @@ class App extends Component {
       <DadataStandardizations
         token={ token }
         apiUrl = {apiUrl}
-        onSelect={ (suggestion) => console.log(suggestion) }
+        onSelect={ (standardization) => console.log(standardization) }
       />
     );
   }
