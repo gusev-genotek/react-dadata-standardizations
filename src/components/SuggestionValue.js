@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Highlighter from 'react-highlight-words';
 
 const SuggestionValue = ({highlighting, searchWords, value}) => {
+  debugger;
   return (
     <span className="suggestions-value">
       {

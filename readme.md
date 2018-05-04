@@ -48,7 +48,7 @@ export default App;
 |hint|string|hint for user in suggestions list|false|`Выберите вариант ниже или продолжите ввод`|
 |minChars|integer|minimal length of query for requesting to api|false|`3`|
 |geolocation|boolean|priority to user city. Works for address suggestions only.|false|`true`|
-|service|string|available values: `address`, `bank`, `fio`, `email` and `party` (I don't know why, but api for searching of the companies is called "party")|false|`address`|
+|service|string|available values: `name`,`address`, `bank`, `fio`, `email` and `party` (I don't know why, but api for searching of the companies is called "party")|false|`address`|
 |highlighting|bool|highlight matched words in suggestions|false|true|
 |suggestionsFormatter (suggestion)|function|custom formatter for items in suggestions list|false||
 |selectedSuggestionFormatter (suggestion)|function|the same as previous for selected suggestion (result will be placed in query string)|false||

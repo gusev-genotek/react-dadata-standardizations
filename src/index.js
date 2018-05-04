@@ -11,7 +11,7 @@ import Api from './api/FetchApi';
 import { buildRequestBody } from "./api/helpers";
 import { SHORT_TYPES } from "./constants/index";
 
-class DadataSuggestions extends Component {
+class DadataStandardizations extends Component {
 
   static propTypes = {
     token: PropTypes.string.isRequired,
@@ -49,14 +49,14 @@ class DadataSuggestions extends Component {
 
   constructor(props) {
     super(props);
-    const {token, service, geolocation} = props;
-    this.api = new Api(token, service, geolocation);
+    const {apiUrl, token, service, geolocation} = props;
+    this.api = new Api(apiUrl, token, service, geolocation);
     this.handleKeyPress = handleKeyPress.bind(this);
   }
 
   state = {
     query: '',
-    suggestions: [],
+    standardizations: [],
     selected: -1,
     loading: false,
     success: false,
@@ -71,7 +71,7 @@ class DadataSuggestions extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       query: nextProps.query,
-      suggestions: [],
+      standardizations: [],
       showSuggestions: false,
       success: false,
     });
@@ -85,10 +85,10 @@ class DadataSuggestions extends Component {
 
     const requestBody = buildRequestBody(query, this.props);
 
-    this.api.suggestions(requestBody)
-      .then(suggestions => {
+    this.api.standardizations(requestBody)
+      .then(standardizations => {
         this.setState({
-          suggestions,
+          standardizations,
           loading: false,
           error: false,
           success: true,
@@ -120,7 +120,7 @@ class DadataSuggestions extends Component {
       this.fetchData(query);
     } else {
       this.setState({
-        suggestions: [],
+        standardizations: [],
         showSuggestions: false,
         success: false,
       });
@@ -153,8 +153,8 @@ class DadataSuggestions extends Component {
   };
 
   selectSuggestion = (index) => {
-    this.setState(({suggestions}) => {
-      const selectedSuggestion = suggestions[index];
+    this.setState(({standardizations}) => {
+      const selectedSuggestion = standardizations[index];
       const query = this.selectedSuggestionFormatter(selectedSuggestion);
       return {
         selected: index,
@@ -168,7 +168,7 @@ class DadataSuggestions extends Component {
     if (index !== selected) {
       this.selectSuggestion(index);
     }
-    const selectedSuggestion = this.state.suggestions[index];
+    const selectedSuggestion = this.state.standardizations[index];
     const { onSelect } = this.props;
     onSelect(selectedSuggestion)
   };
@@ -178,10 +178,11 @@ class DadataSuggestions extends Component {
     if (customFormatter) {
       return customFormatter(suggestion);
     }
-    return suggestion.value;
+    return suggestion.result;
   };
 
   suggestionsFormatter = (suggestion) => {
+    debugger;
     return this.formatter(suggestion, 'suggestionsFormatter')
   };
 
@@ -198,18 +199,18 @@ class DadataSuggestions extends Component {
   };
 
   makeListVisible = () => {
-    const { showSuggestions, suggestions } = this.state;
+    const { showSuggestions, standardizations } = this.state;
     if (showSuggestions) {
       return
     }
-    this.setState({showSuggestions: !!suggestions.length});
+    this.setState({showSuggestions: !!standardizations.length});
   };
 
   handleFocus = () => {
-    const { query, success, suggestions, selected, error } = this.state;
+    const { query, success, standardizations, selected, error } = this.state;
     const { minChars } = this.props;
 
-    if (!!suggestions.length && selected === -1) {
+    if (!!standardizations.length && selected === -1) {
       this.makeListVisible();
     } else if (query.length >= minChars && !success && !error) {
       this.fetchData(query);
@@ -219,13 +220,13 @@ class DadataSuggestions extends Component {
   makeListInvisible = () => {
     const { showSuggestions } = this.state;
     if (!showSuggestions) {
-      return
+      return;
     }
     this.setState({showSuggestions: false});
   };
 
   render() {
-    const {loading, query, showSuggestions, suggestions, selected} = this.state;
+    const {loading, query, showSuggestions, standardizations, selected} = this.state;
     return (
       <div className="suggestions-container">
         <QueryInput
@@ -240,7 +241,7 @@ class DadataSuggestions extends Component {
         />
 
         <SuggestionsList
-          suggestions={ suggestions }
+          standardizations={ standardizations }
           hint={ this.props.hint }
           visible={ showSuggestions }
           onSelect={this.handleSelect}
@@ -255,4 +256,4 @@ class DadataSuggestions extends Component {
   }
 }
 
-export default DadataSuggestions;
+export default DadataStandardizations;

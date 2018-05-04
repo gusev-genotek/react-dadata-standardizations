@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 import Suggestion from './Suggestion';
 
 const SuggestionsList = (props) => {
-  const { suggestions, visible, selected } = props;
-  if (!!suggestions.length && visible) {
+  const { standardizations, visible, selected } = props;
+  if (!!standardizations.length && visible) {
     return (
       <div className="suggestions-wrapper">
         <div className="suggestions-suggestions">
           <div className="suggestions-hint">{props.hint}</div>
-          {suggestions.map((suggestion, index) =>
+          {standardizations.map((suggestion, index) =>
             <Suggestion
               key={ index }  /* @todo our planet needs something better than this */
               index={ index }
@@ -30,7 +30,7 @@ const SuggestionsList = (props) => {
 };
 
 SuggestionsList.propTypes = {
-  suggestions: PropTypes.array.isRequired,
+  standardizations: PropTypes.array.isRequired,
   hint: PropTypes.string.isRequired,
   visible: PropTypes.bool.isRequired,
   suggestionsFormatter: PropTypes.func.isRequired,

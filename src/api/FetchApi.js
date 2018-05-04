@@ -3,11 +3,12 @@ import { headersFactory, requestFactoryFactory } from './helpers';
 
 class FetchApi extends Api {
 
-  constructor(token, service, location = true) {
+  constructor(apiUrl, token, service, location = true) {
     super(token);
     this.headers = headersFactory(token);
     this.requestFactory = requestFactoryFactory(this.headers);
-    this.endpoint = `${Api.apiUrl}/suggest/${service}`;
+    // this.endpoint = `${apiUrl}/${service}`;
+    this.endpoint = `${apiUrl}`;
     if (location && service.toLowerCase() === Api.ADDRESS) {
       this.detectAddress();
     }
@@ -29,19 +30,20 @@ class FetchApi extends Api {
       .catch(() => null); // just die
   };
 
-  suggestions = (body) => {
+  standardizations = (body) => {
     if (!!this.locations_boost.length) {
       body.locations_boost = this.locations_boost;
     }
-    const request = this.requestFactory(this.endpoint, 'POST', body);
-    return fetch(request)
+    const formData = new FormData();
+    formData.append('query', body.query);
+
+     return fetch(this.endpoint, {method: 'POST',body:formData})
       .then(response => {
         if (!response.ok) {
           throw Error(response.statusText)
         }
         return response.json();
-      })
-      .then(response => response.suggestions);
+      });
   };
 }
 
