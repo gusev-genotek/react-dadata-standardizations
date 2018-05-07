@@ -5,12 +5,13 @@ import Suggestion from './Suggestion';
 
 const SuggestionsList = (props) => {
   const { standardizations, visible, selected } = props;
+
   if (!!standardizations.length && visible) {
     return (
       <div className="suggestions-wrapper">
         <div className="suggestions-suggestions">
           <div className="suggestions-hint">{props.hint}</div>
-          {standardizations.map((suggestion, index) =>
+          {standardizations.map((standardization, index) =>
             <Suggestion
               key={ index }  /* @todo our planet needs something better than this */
               index={ index }
@@ -18,8 +19,8 @@ const SuggestionsList = (props) => {
               onSelect={ props.onSelect(index) }
               searchWords = { props.highlighting ? props.searchWords() : [] }
               highlighting = { props.highlighting }
-              value = { props.suggestionsFormatter(suggestion) }
-              subtext = { props.subtextFormatter(suggestion) }
+              value = { props.suggestionsFormatter(standardization) }
+              subtext = { props.subtextFormatter(standardization) }
             />)
           }
         </div>

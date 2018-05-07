@@ -49,7 +49,7 @@ export default App;
 |minChars|integer|minimal length of query for requesting to api|false|`3`|
 |geolocation|boolean|priority to user city. Works for address suggestions only.|false|`true`|
 |service|string|available values: `name`,`address`, `bank`, `fio`, `email` and `party` (I don't know why, but api for searching of the companies is called "party")|false|`address`|
-|highlighting|bool|highlight matched words in suggestions|false|true|
+|query|string|user input |||
 |suggestionsFormatter (suggestion)|function|custom formatter for items in suggestions list|false||
 |selectedSuggestionFormatter (suggestion)|function|the same as previous for selected suggestion (result will be placed in query string)|false||
 |specialRequestOptions|object|additional data for request body|false||

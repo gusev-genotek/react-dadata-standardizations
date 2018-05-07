@@ -182,7 +182,6 @@ class DadataStandardizations extends Component {
   };
 
   suggestionsFormatter = (suggestion) => {
-    debugger;
     return this.formatter(suggestion, 'suggestionsFormatter')
   };
 
