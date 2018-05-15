@@ -26,6 +26,9 @@ class DadataStandardizations extends Component {
     specialRequestOptions: PropTypes.object,
     placeholder: PropTypes.string,
 
+		validate: PropTypes.func,
+		errorMessage: PropTypes.any,
+
     //handlers:
     onSelect: PropTypes.func.isRequired,
     onChange: PropTypes.func,
@@ -36,6 +39,8 @@ class DadataStandardizations extends Component {
   };
 
   static defaultProps = {
+		onChange: () => {},
+		onBlur: () => {},
     token: '',
     count: 10,
     //deferRequestBy: 300,
@@ -52,17 +57,26 @@ class DadataStandardizations extends Component {
     const {apiUrl, token, service, geolocation} = props;
     this.api = new Api(apiUrl, token, service, geolocation);
     this.handleKeyPress = handleKeyPress.bind(this);
+
+    this.state = {
+			_startValidation: false,
+			_isValid: false,
+			_value: this.props.value,
+			query: '',
+			standardizations: [],
+			selected: -1,
+			loading: false,
+			success: false,
+			error: false,
+			showSuggestions: false
+    }
   }
 
-  state = {
-    query: '',
-    standardizations: [],
-    selected: -1,
-    loading: false,
-    success: false,
-    error: false,
-    showSuggestions: false
-  };
+	componentDidMount() {
+		if(this.props.value) {
+			this.setValue(this.props.value);
+		}
+	}
 
   componentWillMount() {
     this.setState({ query: this.props.query });
@@ -130,14 +144,20 @@ class DadataStandardizations extends Component {
     if (onChange) {
       onChange(query);
     }
+
+		this.changeValue(e);
   };
 
-  handleBlur = () => {
+  handleBlur = (e) => {
     this.makeListInvisible();
     const { onBlur } = this.props;
     if (onBlur) {
       onBlur();
     }
+
+    console.log(this.state);
+
+		this.changedValue(e);
   };
 
   handleError = (e) => {
@@ -224,32 +244,74 @@ class DadataStandardizations extends Component {
     this.setState({showSuggestions: false});
   };
 
+	setValue(value) {
+		this.setState({
+			_value: value,
+		}, () => {
+			this.validateInput();
+		});
+	}
+
+	getValue() {
+		return this.state._value;
+	}
+
+	validateInput() {
+		const value = this.getValue();
+		const validates = [];
+
+		this.setState({
+			_isValid: _.every(validates, Boolean),
+		}, () => {
+			this.props.validate();
+		});
+	}
+
+	changeValue(event) {
+		this.setValue(event.currentTarget.value);
+		this.props.onChange(event);
+	}
+	changedValue(event) {
+		if (!this.state._startValidation) {
+			this.setState({
+				_startValidation: true,
+			});
+		}
+		this.props.onBlur();
+	}
+
   render() {
     const {loading, query, showSuggestions, standardizations, selected} = this.state;
-    return (
-      <div className="suggestions-container">
-        <QueryInput
-          onChange={ this.handleChange }
-          placeholder={ this.props.placeholder }
-          loading={ loading }
-          query={ query }
-          onMouseDown={ this.makeListVisible }
-          onKeyPress={ this.handleKeyPress }
-          onBlur={ this.handleBlur }
-          onFocus={ this.handleFocus }
-        />
+		const errorClass = this.state._startValidation ? (this.state._isValid ? '' : ' error') : '';
+		const errorMessage = this.props.errorMessage;
+		const inputValue = this.getValue() ? this.getValue() : this.props.value;
 
-        <SuggestionsList
-          standardizations={ standardizations }
-          hint={ this.props.hint }
-          visible={ showSuggestions }
-          onSelect={this.handleSelect}
-          selected={selected}
-          suggestionsFormatter={this.suggestionsFormatter}
-          searchWords={ this.searchWords }
-          highlighting = { this.props.highlighting }
-          subtextFormatter = { this.subtextFormatter }
-        />
+    return (
+      <div className={'suggestions-wrapper' + errorClass}>
+        <div className="suggestions-container">
+          <QueryInput
+            onChange={ this.handleChange }
+            placeholder={ this.props.placeholder }
+            loading={ loading }
+            query={ query }
+            onMouseDown={ this.makeListVisible }
+            onKeyPress={ this.handleKeyPress }
+            onBlur={ this.handleBlur }
+            onFocus={ this.handleFocus }
+          />
+          <SuggestionsList
+            standardizations={ standardizations }
+            hint={ this.props.hint }
+            visible={ showSuggestions }
+            onSelect={this.handleSelect}
+            selected={selected}
+            suggestionsFormatter={this.suggestionsFormatter}
+            searchWords={ this.searchWords }
+            highlighting = { this.props.highlighting }
+            subtextFormatter = { this.subtextFormatter }
+          />
+        </div>
+        <div className="errorMessage">{errorMessage}</div>
       </div>
     );
   }
