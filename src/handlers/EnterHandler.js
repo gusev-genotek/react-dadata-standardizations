@@ -8,7 +8,7 @@ function EnterHandler(e, context) {
     if (selected !== -1) {
       context.handleSelect(selected)();
       context.makeListInvisible();
-    } else if (!!suggestions.length) {
+    } else if (!!suggestions && !!suggestions.length) {
       const { query } = context.state;
       const trimmedQuery = query.trim();
       const index = suggestions.findIndex(({value}) => {

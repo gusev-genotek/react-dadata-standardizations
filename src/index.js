@@ -14,6 +14,7 @@ import { SHORT_TYPES } from "./constants/index";
 class DadataStandardizations extends Component {
 
   static propTypes = {
+    apiUrl:PropTypes.string.isRequired,
     token: PropTypes.string.isRequired,
     count: PropTypes.number.isRequired,
     //deferRequestBy: PropTypes.number.isRequired, // doesn't work with fetch Api
@@ -25,9 +26,10 @@ class DadataStandardizations extends Component {
     highlighting: PropTypes.bool.isRequired,
     specialRequestOptions: PropTypes.object,
     placeholder: PropTypes.string,
+    autocomplete: PropTypes.string,
 
 		validate: PropTypes.func,
-		errorMessage: PropTypes.any,
+		errorMessage: PropTypes.string,
 
     //handlers:
     onSelect: PropTypes.func.isRequired,
@@ -50,11 +52,12 @@ class DadataStandardizations extends Component {
     query: '',
     service: 'address',
     highlighting: true,
+    autocomplete: 'off'
   };
 
   constructor(props) {
     super(props);
-    const {apiUrl, token, service, geolocation} = props;
+    const {apiUrl, token, service, geolocation, autocomplete} = props;
     this.api = new Api(apiUrl, token, service, geolocation);
     this.handleKeyPress = handleKeyPress.bind(this);
 
@@ -146,6 +149,7 @@ class DadataStandardizations extends Component {
     }
 
 		this.changeValue(e);
+    this.validateInput();
   };
 
   handleBlur = (e) => {
@@ -154,8 +158,6 @@ class DadataStandardizations extends Component {
     if (onBlur) {
       onBlur();
     }
-
-    console.log(this.state);
 
 		this.changedValue(e);
   };
@@ -194,10 +196,6 @@ class DadataStandardizations extends Component {
   };
 
   formatter = (suggestion, name) => {
-    const { [name]: customFormatter } = this.props;
-    if (customFormatter) {
-      return customFormatter(suggestion);
-    }
     return suggestion.result;
   };
 
@@ -248,6 +246,9 @@ class DadataStandardizations extends Component {
 		this.setState({
 			_value: value,
 		}, () => {
+      //this is not called by some obscure reason
+      //https://github.com/facebook/react/issues/6320
+      //therefore we validate input outside asynchronously
 			this.validateInput();
 		});
 	}
@@ -283,8 +284,9 @@ class DadataStandardizations extends Component {
   render() {
     const {loading, query, showSuggestions, standardizations, selected} = this.state;
 		const errorClass = this.state._startValidation ? (this.state._isValid ? '' : ' error') : '';
-		const errorMessage = this.props.errorMessage;
+		const errorMessage = this.state._isValid ? '' : this.props.errorMessage;
 		const inputValue = this.getValue() ? this.getValue() : this.props.value;
+    const autocomplete = this.props.autocomplete;
 
     return (
       <div className={'suggestions-wrapper' + errorClass}>
@@ -298,6 +300,7 @@ class DadataStandardizations extends Component {
             onKeyPress={ this.handleKeyPress }
             onBlur={ this.handleBlur }
             onFocus={ this.handleFocus }
+            autocomplete={ autocomplete }
           />
           <SuggestionsList
             standardizations={ standardizations }

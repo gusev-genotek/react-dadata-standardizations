@@ -37,10 +37,10 @@ class Suggestion extends Component {
 
 Suggestion.propTypes = {
   selected: PropTypes.bool.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
   searchWords: PropTypes.array.isRequired,
   highlighting: PropTypes.bool.isRequired,
 };
-Suggestion.defaultProps = {};
+Suggestion.defaultProps = {value: undefined};
 
 export default Suggestion;
