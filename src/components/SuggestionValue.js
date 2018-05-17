@@ -20,7 +20,7 @@ const SuggestionValue = ({highlighting, searchWords, value}) => {
 SuggestionValue.propTypes = {
   highlighting: PropTypes.bool.isRequired,
   searchWords: PropTypes.array,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
 };
 SuggestionValue.defaultProps = {
   highlighting: true,
